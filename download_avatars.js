@@ -1,10 +1,11 @@
 var request = require('request');
 var fs = require('fs');
 
-console.log('Welcome to the GitHub Avatar Downloader!\n');
+console.log('Welcome to the GitHub Avatar Downloader!\n')
+//The \n character is used to find a newline character.
 
 var GITHUB_USER = "kevinkenny92";
-var GITHUB_TOKEN = "0d7cdc2953cd259e6b2ea29a3265f4cee7a7872f";;
+var GITHUB_TOKEN = "0d7cdc2953cd259e6b2ea29a3265f4cee7a7872f";
 
 function complete(){
   console.log('COMPLETED!');
@@ -17,15 +18,18 @@ function getRepoContributors(repoOwner, repoName, callback) {
           }
       };
 
-request.get(requestURL)
-       .on('error', function (err) {
-         throw err;
-       })
-       .on('response', function (response) {
-         console.log('Response Status Code: ', response.statusCode, '\nResponse Content Type:', response.headers['content-type']);
-       })
-       .pipe(fs.createWriteStream('./new.txt'));
+request(requestURL, function(err, res, body){
+  if (err) throw err;
+
+  var text = JSON.parse(body);
+  for (i in text){
+    console.log(text[i].login)
+    console.log(text[i].avatar_url, '\n');  //The \n character is used to find a newline character.
+  }
+  });
 }
+
+
 
 
 getRepoContributors('jquery', 'jquery', function(err, result) {
