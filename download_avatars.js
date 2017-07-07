@@ -16,14 +16,14 @@ function downloadImageByURL(url, filePath) {
          .on('error', function (err) {
            throw err;
          })
-          .on('response', function(response) {
-         .pipe(fs.createWriteStream(filePath));
+         .pipe(fs.createWriteStream(filePath + '.jpg'));
 }
 
 function iterateContributors(text){
   for (i in text){
     downloadImageByURL(text[i].avatar_url, `avatars/${text[i].login}`);
     }
+}
 
 function getRepoContributors(repoOwner, repoName, callback) {
   var requestURL = {
@@ -31,7 +31,7 @@ function getRepoContributors(repoOwner, repoName, callback) {
         headers: {'User-Agent': 'GitHub Avatar Downloader - Student Project'
           }
       };
-      request(options, function(err, res, body){}
+      request(options, function(err, res, body){
       if (err) throw err;
         var text = JSON.parse(body);
       callback (text);
@@ -39,13 +39,6 @@ function getRepoContributors(repoOwner, repoName, callback) {
 }
 
 
-getRepoContributors(Owner, Name, function(err, result) {
-  console.log("Errors:", err);
-  console.log("Result:", result);
-  for(var i = 0; i < result.length; i++) {
-    downloadImageByURL(result[i].avatar_url, 'avatars/' + result[i].login + '.jpg')
-  }
-})
 
 
 //downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani")
