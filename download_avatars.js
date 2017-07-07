@@ -1,15 +1,14 @@
 var request = require('request');
 var fs = require('fs');
+var args = process.argv;
 
-console.log('Welcome to the GitHub Avatar Downloader!\n')
-//The \n character is used to find a newline character.
+//
+var repOwner = process.argv[2];
+var repo = process.argv[3];
 
 var GITHUB_USER = "kevinkenny92";
 var GITHUB_TOKEN = "0d7cdc2953cd259e6b2ea29a3265f4cee7a7872f";
 
-function complete(){
-  console.log('COMPLETED!');
-}
 
 
 function downloadImageByURL(url, filePath) {
@@ -17,11 +16,14 @@ function downloadImageByURL(url, filePath) {
          .on('error', function (err) {
            throw err;
          })
-         .on('response', function (response) {
-
-         })
-         .pipe(fs.createWriteStream(filePath + '.jpg').on('finish', complete));
+          .on('response', function(response) {
+         .pipe(fs.createWriteStream(filePath));
 }
+
+function iterateContributors(text){
+  for (i in text){
+    downloadImageByURL(text[i].avatar_url, `avatars/${text[i].login}`);
+    }
 
 function getRepoContributors(repoOwner, repoName, callback) {
   var requestURL = {
@@ -29,22 +31,21 @@ function getRepoContributors(repoOwner, repoName, callback) {
         headers: {'User-Agent': 'GitHub Avatar Downloader - Student Project'
           }
       };
-
-
-request(requestURL, function(err, res, body){
-  if (err) throw err;
-  var text = JSON.parse(body);
-  for (i in text){
-    console.log(text[i].avatar_url);
-    console.log(`avatars/${text[i].login}`)
- }
+      request(options, function(err, res, body){}
+      if (err) throw err;
+        var text = JSON.parse(body);
+      callback (text);
   });
 }
 
 
-getRepoContributors('jquery', 'jquery', function(err, result) {
-  console.log('Errors:', err);
-  console.log('Result:', result);
-});
+getRepoContributors(Owner, Name, function(err, result) {
+  console.log("Errors:", err);
+  console.log("Result:", result);
+  for(var i = 0; i < result.length; i++) {
+    downloadImageByURL(result[i].avatar_url, 'avatars/' + result[i].login + '.jpg')
+  }
+})
 
-downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani")
+
+//downloadImageByURL("https://avatars2.githubusercontent.com/u/2741?v=3&s=466", "avatars/kvirani")
